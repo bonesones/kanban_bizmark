@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    type-check:
+      glob: "./src/**/*.{ts,tsx}"
+      run: npm run type-check
+
+    eslint:
+      glob: "./src/**/*.{ts,tsx}"
+      run: npm run lint --fix
+
+    pretties:
+      glob: "*.{js,ts,jsx,tsx,json,yaml,md}"
+      run: npm run format

@@ -1,6 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
 
-import { useBoardStore } from "@/entities/board";
 import { Task } from "@/entities/task";
 
 import { DotsIcon, PlusIcon } from "@/shared/icons";
@@ -9,19 +8,17 @@ import type { Column as ColumnModel } from "../model/types";
 
 type ColumnProps = {
   column: ColumnModel;
+  // eslint-disable-next-line no-unused-vars
+  toggleTaskCompletion: (taskId: number, columnId: number) => void;
 };
 
-export const Column = ({ column }: ColumnProps) => {
+export const Column = ({ column, toggleTaskCompletion }: ColumnProps) => {
   const { setNodeRef } = useDroppable({
     id: column.id,
     data: {
       type: "column",
       columnId: column.id,
     },
-  });
-
-  const completeTask = useBoardStore((state) => {
-    return state.completeTask;
   });
 
   return (
@@ -43,18 +40,14 @@ export const Column = ({ column }: ColumnProps) => {
         </div>
       </div>
 
-      {column.tasks.map((task) => {
-        return (
-          <Task
-            key={task.id}
-            task={task}
-            columnId={column.id}
-            onComplete={() => {
-              return completeTask(task.id, column.id);
-            }}
-          />
-        );
-      })}
+      {column.tasks.map((task) => (
+        <Task
+          key={task.id}
+          task={task}
+          columnId={column.id}
+          onToggleComplete={toggleTaskCompletion}
+        />
+      ))}
     </div>
   );
 };

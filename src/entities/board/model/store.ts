@@ -12,7 +12,7 @@ type BoardState = {
   // eslint-disable-next-line no-unused-vars
   moveTask: (taskId: number, toColumnId: number) => void;
   // eslint-disable-next-line no-unused-vars
-  completeTask: (taskId: number, columnId: number) => void;
+  toggleTaskCompletion: (taskId: number, columnId: number) => void;
 };
 
 const MOCK_COLUMNS: ColumnModel[] = [
@@ -145,111 +145,86 @@ const MOCK_COLUMNS: ColumnModel[] = [
 
 export const useBoardStore = create<BoardState>()(
   persist(
-    (set) => {
-      return {
-        board: {
-          id: 1,
-          name: "Проект Лиц",
-          columns: MOCK_COLUMNS,
-          status: "В работе",
-        },
+    (set) => ({
+      board: {
+        id: 1,
+        name: "Проект Лиц",
+        columns: MOCK_COLUMNS,
+        status: "В работе",
+      },
 
-        addColumn: (title) => {
-          return set((state) => {
-            return {
-              board: {
-                ...state.board,
-                columns: [
-                  ...state.board.columns,
-                  {
-                    id: state.board.columns.length + 1,
-                    name: title,
-                    tasks: [],
-                  },
-                ],
+      addColumn: (title) =>
+        set((state) => ({
+          board: {
+            ...state.board,
+            columns: [
+              ...state.board.columns,
+              {
+                id: state.board.columns.length + 1,
+                name: title,
+                tasks: [],
               },
-            };
-          });
-        },
+            ],
+          },
+        })),
 
-        moveTask: (taskId, toColumnId) => {
-          return set((state) => {
-            const columns = state.board.columns;
+      moveTask: (taskId, toColumnId) =>
+        set((state) => {
+          const columns = state.board.columns;
 
-            const fromColumnIndex = columns.findIndex((column) => {
-              return column.tasks.some((task) => {
-                return task.id === taskId;
-              });
-            });
+          const fromColumnIndex = columns.findIndex((column) =>
+            column.tasks.some((task) => task.id === taskId),
+          );
 
-            const toColumnIndex = columns.findIndex((column) => {
-              return column.id === toColumnId;
-            });
+          const toColumnIndex = columns.findIndex(
+            (column) => column.id === toColumnId,
+          );
 
-            if (fromColumnIndex === -1 || toColumnIndex === -1) {
-              return state;
-            }
+          if (fromColumnIndex === -1 || toColumnIndex === -1) {
+            return state;
+          }
 
-            const taskIndex = columns[fromColumnIndex].tasks.findIndex(
-              (task) => {
-                return task.id === taskId;
-              },
-            );
+          const taskIndex = columns[fromColumnIndex].tasks.findIndex(
+            (task) => task.id === taskId,
+          );
 
-            const [task] = columns[fromColumnIndex].tasks.splice(taskIndex, 1);
-            columns[toColumnIndex].tasks.push(task);
+          const [task] = columns[fromColumnIndex].tasks.splice(taskIndex, 1);
+          columns[toColumnIndex].tasks.push(task);
 
-            return {
-              board: {
-                ...state.board,
-                columns,
-              },
-            };
-          });
-        },
+          return {
+            board: {
+              ...state.board,
+              columns,
+            },
+          };
+        }),
 
-        completeTask: (taskId, columnId) => {
-          return set((state) => {
-            const columns = state.board.columns;
+      toggleTaskCompletion: (taskId, columnId) =>
+        set((state) => ({
+          board: {
+            ...state.board,
+            columns: state.board.columns.map((column) => {
+              if (column.id !== columnId) {
+                return column;
+              }
 
-            const activeColumn = columns.find((column) => {
-              return column.id === columnId;
-            });
-
-            if (!activeColumn) {
-              return state;
-            }
-
-            const taskIndex = activeColumn.tasks.findIndex((task) => {
-              return task.id === taskId;
-            });
-
-            if (taskIndex === -1) {
-              return state;
-            }
-
-            activeColumn.tasks[taskIndex].isDone = true;
-            activeColumn.tasks[taskIndex].status = "done";
-
-            return {
-              board: {
-                ...state.board,
-                columns,
-              },
-            };
-          });
-        },
-      };
-    },
+              return {
+                ...column,
+                tasks: column.tasks.map((task) =>
+                  task.id !== taskId ? task : { ...task, isDone: !task.isDone },
+                ),
+              };
+            }),
+          },
+        })),
+    }),
     {
       name: "kanban-board-storage",
-      partialize: (state) => {
-        return {
-          board: {
-            columns: state.board.columns,
-          },
-        };
-      },
+      partialize: (state) => ({
+        board: {
+          columns: state.board.columns,
+        },
+      }),
     },
   ),
 );

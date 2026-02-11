@@ -23,10 +23,11 @@ dayjs.locale("ru");
 type TaskProps = {
   task: TaskModel;
   columnId: number;
-  onComplete: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onToggleComplete: (taskId: number, columnId: number) => void;
 };
 
-export const Task = ({ task, columnId, onComplete }: TaskProps) => {
+export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
     data: {
@@ -66,6 +67,10 @@ export const Task = ({ task, columnId, onComplete }: TaskProps) => {
       : "text-accentRed",
   );
 
+  const handleToggleComplete = () => {
+    onToggleComplete(task.id, columnId);
+  };
+
   return (
     <motion.div
       ref={setNodeRef}
@@ -82,7 +87,7 @@ export const Task = ({ task, columnId, onComplete }: TaskProps) => {
         <button
           type="button"
           className="mt-0.75 cursor-pointer"
-          onClick={onComplete}
+          onClick={handleToggleComplete}
         >
           {task.isDone ? (
             <CheckpointFilledIcon className="h-3.25" />

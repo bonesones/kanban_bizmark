@@ -1,5 +1,7 @@
 import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
 
+import { useToggleTaskCompletion } from "@/features/toggle-task-completion";
+
 import { useBoardStore } from "@/entities/board";
 import { Column } from "@/entities/column";
 
@@ -8,17 +10,13 @@ import { PlusIcon } from "@/shared/icons";
 import { KanbanBoardHeader } from "./KanbanHeader";
 
 export const KanbanBoard = () => {
-  const columns = useBoardStore((state) => {
-    return state.board.columns;
-  });
+  const toggleTaskCompletion = useToggleTaskCompletion();
 
-  const moveTask = useBoardStore((state) => {
-    return state.moveTask;
-  });
+  const columns = useBoardStore((state) => state.board.columns);
 
-  const addColumn = useBoardStore((state) => {
-    return state.addColumn;
-  });
+  const moveTask = useBoardStore((state) => state.moveTask);
+
+  const addColumn = useBoardStore((state) => state.addColumn);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -46,18 +44,20 @@ export const KanbanBoard = () => {
           onDragEnd={handleDragEnd}
         >
           <div className="overflow-x-auto flex h-full gap-5">
-            {columns.map((column) => {
-              return <Column key={column.id} column={column} />;
-            })}
+            {columns.map((column) => (
+              <Column
+                key={column.id}
+                column={column}
+                toggleTaskCompletion={toggleTaskCompletion}
+              />
+            ))}
           </div>
         </DndContext>
 
         <div className="flex-1 pl-5 min-w-96 shrink-0">
           <button
             type="button"
-            onClick={() => {
-              return addColumn("Новый столбец");
-            }}
+            onClick={() => addColumn("Новый столбец")}
             className="pt-3 text-base flex gap-3 items-center text-gray cursor-pointer "
           >
             <PlusIcon className="h-3" />

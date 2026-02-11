@@ -52,7 +52,7 @@ export default [
         "error",
         { ignoreRestSiblings: true },
       ],
-      "arrow-body-style": [2, "always"],
+      "arrow-body-style": [2, "as-needed"],
       curly: "error",
       "no-console": ["error", { allow: ["warn", "error"] }],
       "react/jsx-no-useless-fragment": [2, { allowExpressions: false }],
