@@ -4,13 +4,9 @@ import { ProjectViewTabs } from "./ProjectViewTabs";
 import { UserPanel } from "./UserPanel";
 
 export const Header = () => {
-  const name = useBoardStore((state) => {
-    return state.board.name;
-  });
+  const name = useBoardStore((state) => state.board.name);
 
-  const status = useBoardStore((state) => {
-    return state.board.status;
-  });
+  const status = useBoardStore((state) => state.board.status);
 
   return (
     <header className="flex justify-between items-center w-full">

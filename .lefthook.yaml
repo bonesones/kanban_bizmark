@@ -2,13 +2,13 @@ pre-commit:
   parallel: true
   commands:
     type-check:
-      glob: "./src/**/*.{ts,tsx}"
-      run: npm run type-check
+      glob: "*.{ts,tsx}"
+      run: npx tsc --noEmit
 
     eslint:
-      glob: "./src/**/*.{ts,tsx}"
-      run: npm run lint --fix
+      glob: "*.{js,ts,tsx}"
+      run: npx eslint {staged_files}
 
-    pretties:
-      glob: "*.{js,ts,jsx,tsx,json,yaml,md}"
-      run: npm run format
+    prettier:
+      glob: "*.{js,ts,tsx,json,css,md}"
+      run: npx prettier --write {staged_files}
