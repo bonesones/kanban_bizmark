@@ -3,7 +3,7 @@ import clsx from "clsx";
 export const FavoriteItem = ({ title, color }: FavoriteItemProps) => {
   const className = clsx(
     "w-2.5 h-2.5 rounded-full",
-    color === "green" ? "bg-accentGreen" : "bg-accentBlue",
+    color === "green" ? "bg-accentGreen" : "bg-accentLightBlue",
   );
 
   return (

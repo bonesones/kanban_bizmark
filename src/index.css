@@ -3,8 +3,11 @@
 @theme {
   --color-bgPrimary: #f2f5fa;
   --color-lightGray: #b7b9bb;
+  --color-gray: #808080;
   --color-accentGreen: #8bc34a;
-  --color-accentBlue: #03a9f4;
+  --color-accentLightBlue: #03a9f4;
+  --color-accentBlue: #4f6ea3;
+  --color-accentRed: #ff5722;
   --color-textMain: #333333;
 
   --font-open: "Open Sans", sans-serif;

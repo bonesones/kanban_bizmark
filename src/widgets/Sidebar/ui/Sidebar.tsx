@@ -14,10 +14,13 @@ import { TeamItem, type TeamItemProps } from "./TeamItem";
 
 export const Sidebar = () => {
   return (
-    <aside className="w-80">
+    <aside className="w-72">
       <div className="flex justify-between items-center">
         <img src={logo} className="h-9 w-24" alt="logo" />
-        <BurgerIcon className="h-3.5 text-lightGray" />
+
+        <button type="button" className="cursor-pointer">
+          <BurgerIcon className="h-3.5 text-lightGray" />
+        </button>
       </div>
 
       <nav className="mt-7">
@@ -47,7 +50,6 @@ export const Sidebar = () => {
 
         <button className="text-lightGray flex items-center gap-2 cursor-pointer mt-3">
           <span className="text-xs leading-none">Раскрыть весь список</span>
-
           <ArrowDownIcon className="h-1" />
         </button>
       </div>
@@ -55,7 +57,7 @@ export const Sidebar = () => {
       <div className="mt-5">
         <span className="text-xs font-bold text-lightGray">Команды</span>
 
-        <ul className="flex flex-col gap-3 font-semibold mt-2">
+        <ul className="flex flex-col gap-4 font-semibold mt-2">
           {teams.map((props, i) => {
             return (
               <li key={i}>
@@ -97,7 +99,7 @@ const navLinks: NavLinkProps[] = [
     href: "#",
   },
   {
-    icon: <CheckpointIcon className="h-4" />,
+    icon: <CheckpointIcon className="h-4 fill-none" />,
     text: "Мои задачи",
     href: "#",
   },
