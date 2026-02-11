@@ -88,6 +88,7 @@ export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
           type="button"
           className="mt-0.75 cursor-pointer"
           onClick={handleToggleComplete}
+          onPointerDown={(e) => e.stopPropagation()}
         >
           {task.isDone ? (
             <CheckpointFilledIcon className="h-3.25" />
