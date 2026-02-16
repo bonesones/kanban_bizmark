@@ -1,4 +1,4 @@
-import { PlayIcon } from "@/shared/icons";
+import { PlayActiveIcon, PlayIcon } from "@/shared/icons";
 
 import type { TaskActions } from "../api/taskActions";
 
@@ -23,13 +23,13 @@ export const TaskTimerButton = ({
     <button
       type="button"
       onClick={() => toggleTimer(taskId, columnId)}
-      className="text-accentBlue cursor-pointer"
+      className="cursor-pointer w-full h-full"
       onPointerDown={(e) => e.stopPropagation()}
     >
       {isRunning ? (
-        <PlayIcon className="h-4.5 fill-accentBlue" />
+        <PlayActiveIcon className="h-full" />
       ) : (
-        <PlayIcon className="h-4.5 fill-accentBlue" />
+        <PlayIcon className="h-full text-accentBlue" />
       )}
     </button>
   );

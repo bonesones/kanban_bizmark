@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import type { ColumnModel } from "@/entities/column";
+import type { TaskModel } from "@/entities/task";
 
 import type { KanbanBoardModel } from "..";
 
@@ -19,6 +20,23 @@ export type BoardState = {
   stopTaskTimer: (taskId: number, columnId: number) => void;
 };
 
+const updateTaskInColumn = (
+  columns: ColumnModel[],
+  columnId: number,
+  taskId: number,
+  updater: (task: TaskModel) => TaskModel,
+) =>
+  columns.map((column) =>
+    column.id !== columnId
+      ? column
+      : {
+          ...column,
+          tasks: column.tasks.map((task) =>
+            task.id === taskId ? updater(task) : task,
+          ),
+        },
+  );
+
 const MOCK_COLUMNS: ColumnModel[] = [
   {
     id: 1,
@@ -27,8 +45,8 @@ const MOCK_COLUMNS: ColumnModel[] = [
       {
         id: 1,
         name: "Разработать новый чекаут для Юр. Лиц. eeee",
-        timePlanned: 10,
-        timeSpent: 5,
+        timePlanned: 7200,
+        timeSpent: 0,
         dueDate: new Date(),
         status: "toDo",
         isDone: false,
@@ -55,8 +73,8 @@ const MOCK_COLUMNS: ColumnModel[] = [
       {
         id: 4,
         name: "Разработать новый чекаут для Юр. Лиц.",
-        timePlanned: 10,
-        timeSpent: 5,
+        timePlanned: 7200,
+        timeSpent: 0,
         dueDate: new Date(),
         status: "toDo",
         isDone: false,
@@ -83,8 +101,8 @@ const MOCK_COLUMNS: ColumnModel[] = [
       {
         id: 7,
         name: "Разработать новый чекаут для Юр. Лиц.",
-        timePlanned: 10,
-        timeSpent: 5,
+        timePlanned: 7200,
+        timeSpent: 0,
         dueDate: new Date(),
         status: "toDo",
         isDone: false,
@@ -111,8 +129,8 @@ const MOCK_COLUMNS: ColumnModel[] = [
       {
         id: 10,
         name: "Разработать новый чекаут для Юр. Лиц.",
-        timePlanned: 10,
-        timeSpent: 5,
+        timePlanned: 7200,
+        timeSpent: 0,
         dueDate: new Date(),
         status: "toDo",
         isDone: false,
@@ -139,8 +157,8 @@ const MOCK_COLUMNS: ColumnModel[] = [
       {
         id: 13,
         name: "Разработать новый чекаут для Юр. Лиц. eeeee",
-        timePlanned: 10,
-        timeSpent: 5,
+        timePlanned: 7200,
+        timeSpent: 0,
         dueDate: new Date(),
         status: "toDo",
         isDone: false,
@@ -203,17 +221,31 @@ export const useBoardStore = create<BoardState>()(
             return state;
           }
 
-          const taskIndex = columns[fromColumnIndex].tasks.findIndex(
-            (task) => task.id === taskId,
+          if (fromColumnIndex === toColumnIndex) {
+            return state;
+          }
+
+          const task = columns[fromColumnIndex].tasks.find(
+            (t) => t.id === taskId,
           );
 
-          const [task] = columns[fromColumnIndex].tasks.splice(taskIndex, 1);
-          columns[toColumnIndex].tasks.push(task);
+          const newColumns = columns.map((col, index) => {
+            if (index === fromColumnIndex) {
+              return {
+                ...col,
+                tasks: col.tasks.filter((task) => task.id !== taskId),
+              };
+            }
+            if (index === toColumnIndex && task) {
+              return { ...col, tasks: [...col.tasks, task] };
+            }
+            return col;
+          });
 
           return {
             board: {
               ...state.board,
-              columns,
+              columns: newColumns,
             },
           };
         }),
@@ -222,18 +254,12 @@ export const useBoardStore = create<BoardState>()(
         set((state) => ({
           board: {
             ...state.board,
-            columns: state.board.columns.map((column) => {
-              if (column.id !== columnId) {
-                return column;
-              }
-
-              return {
-                ...column,
-                tasks: column.tasks.map((task) =>
-                  task.id !== taskId ? task : { ...task, isDone: !task.isDone },
-                ),
-              };
-            }),
+            columns: updateTaskInColumn(
+              state.board.columns,
+              columnId,
+              taskId,
+              (task) => ({ ...task, isDone: !task.isDone }),
+            ),
           },
         })),
 
@@ -241,29 +267,19 @@ export const useBoardStore = create<BoardState>()(
         set((state) => ({
           board: {
             ...state.board,
-            columns: state.board.columns.map((column) => {
-              if (column.id !== columnId) {
-                return column;
-              }
-
-              return {
-                ...column,
-                tasks: column.tasks.map((task) => {
-                  if (task.id !== taskId) {
-                    return task;
-                  }
-
-                  return {
-                    ...task,
-                    subtasks: task.subtasks.map((subtask) =>
-                      subtask.id !== subtaskId
-                        ? subtask
-                        : { ...subtask, isDone: !subtask.isDone },
-                    ),
-                  };
-                }),
-              };
-            }),
+            columns: updateTaskInColumn(
+              state.board.columns,
+              columnId,
+              taskId,
+              (task) => ({
+                ...task,
+                subtasks: task.subtasks.map((subtask) =>
+                  subtask.id !== subtaskId
+                    ? subtask
+                    : { ...subtask, isDone: !subtask.isDone },
+                ),
+              }),
+            ),
           },
         })),
 

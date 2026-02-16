@@ -1,5 +1,6 @@
 import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
 
+import { useBoardActions } from "@/features/board-actions";
 import { useTaskActions } from "@/features/task-actions";
 
 import { useBoardStore } from "@/entities/board";
@@ -10,13 +11,10 @@ import { PlusIcon } from "@/shared/icons";
 import { KanbanBoardHeader } from "./KanbanHeader";
 
 export const KanbanBoard = () => {
+  const { addColumn } = useBoardActions();
   const taskActions = useTaskActions();
 
   const columns = useBoardStore((state) => state.board.columns);
-
-  const moveTask = useBoardStore((state) => state.moveTask);
-
-  const addColumn = useBoardStore((state) => state.addColumn);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -31,7 +29,7 @@ export const KanbanBoard = () => {
       return;
     }
 
-    moveTask(taskId, columnId);
+    taskActions.moveTask(taskId, columnId);
   };
 
   return (

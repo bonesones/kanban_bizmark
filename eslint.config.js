@@ -36,6 +36,8 @@ export default [
         document: "readonly",
         navigator: "readonly",
         HTMLElement: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
       },
     },
 
