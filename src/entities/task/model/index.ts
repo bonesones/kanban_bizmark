@@ -1,1 +1,1 @@
-export type { Task, TaskStatus } from "./task";
+export type { Task, TaskStatus, TaskTimer } from "./task";

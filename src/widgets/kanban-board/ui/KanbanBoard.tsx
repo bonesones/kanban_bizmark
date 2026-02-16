@@ -1,6 +1,6 @@
 import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
 
-import { useToggleTaskCompletion } from "@/features/toggle-task-completion";
+import { useTaskActions } from "@/features/task-actions";
 
 import { useBoardStore } from "@/entities/board";
 import { Column } from "@/entities/column";
@@ -10,7 +10,7 @@ import { PlusIcon } from "@/shared/icons";
 import { KanbanBoardHeader } from "./KanbanHeader";
 
 export const KanbanBoard = () => {
-  const toggleTaskCompletion = useToggleTaskCompletion();
+  const taskActions = useTaskActions();
 
   const columns = useBoardStore((state) => state.board.columns);
 
@@ -48,7 +48,7 @@ export const KanbanBoard = () => {
               <Column
                 key={column.id}
                 column={column}
-                toggleTaskCompletion={toggleTaskCompletion}
+                taskActions={taskActions}
               />
             ))}
           </div>

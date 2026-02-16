@@ -2,40 +2,42 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { motion } from "framer-motion";
-import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState } from "react";
 
-import {
-  BranchIcon,
-  CheckpointFilledIcon,
-  CheckpointIcon,
-  PlayIcon,
-} from "@/shared/icons";
+import { BranchIcon } from "@/shared/icons";
 
 import { user } from "@/assets";
 
 import "dayjs/locale/ru";
 
+import type { TaskActions } from "../api/taskActions";
 import type { Task as TaskModel } from "../model/task";
+
+import { Subtask } from "./Subtask";
+import { TaskCompletionButton } from "./TaskCompletionButton";
+import { TaskTimerButton } from "./TaskTimerButton";
 
 dayjs.locale("ru");
 
 type TaskProps = {
   task: TaskModel;
   columnId: number;
-  // eslint-disable-next-line no-unused-vars
-  onToggleComplete: (taskId: number, columnId: number) => void;
+  actions: TaskActions;
 };
 
-export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id,
-    data: {
-      type: "task",
-      taskId: task.id,
-      columnId: columnId,
-    },
-  });
+export const Task = ({ task, columnId, actions }: TaskProps) => {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: task.id,
+      data: {
+        type: "task",
+        taskId: task.id,
+        columnId: columnId,
+      },
+    });
 
   const style: React.CSSProperties = {
     transform: CSS.Translate.toString(transform),
@@ -45,6 +47,8 @@ export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
     borderRadius: 6,
     boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
     cursor: "grab",
+    position: "relative",
+    zIndex: isDragging ? 999 : "auto",
   };
 
   const branchVariants = {
@@ -67,8 +71,8 @@ export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
       : "text-accentRed",
   );
 
-  const handleToggleComplete = () => {
-    onToggleComplete(task.id, columnId);
+  const handleToggleDetails = () => {
+    setIsDetailsOpen((prev) => !prev);
   };
 
   return (
@@ -84,18 +88,13 @@ export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
       <div
         className={`flex items-start gap-3 ${task.isDone ? "opacity-50" : ""}`}
       >
-        <button
-          type="button"
-          className="mt-0.75 cursor-pointer"
-          onClick={handleToggleComplete}
-          onPointerDown={(e) => e.stopPropagation()}
-        >
-          {task.isDone ? (
-            <CheckpointFilledIcon className="h-3.25" />
-          ) : (
-            <CheckpointIcon className="h-3.25 fill-none" />
-          )}
-        </button>
+        <TaskCompletionButton
+          isDone={task.isDone}
+          taskId={task.id}
+          columnId={columnId}
+          type="task"
+          toggleTaskCompletion={actions.toggleTaskCompletion}
+        />
 
         <h3 className="text-sm text-textMain">{task.name}</h3>
       </div>
@@ -106,11 +105,14 @@ export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
 
           <div className="text-xs flex flex-col font-semibold">
             {task.isDone ? (
-              <span className="text-lightGray">{task.timeSpent} ч.</span>
+              <span className="text-lightGray">
+                {dayjs(task.timeSpent).format("HH:mm")}
+              </span>
             ) : (
               <>
                 <span className="text-lightGray">
-                  {task.timeSpent} ч. / {task.timePlanned} ч.
+                  {dayjs(task.timeSpent).format("HH:mm")} / {task.timePlanned}{" "}
+                  ч.
                 </span>
                 <span className={dateClassName}>До {dueDateFormatted}</span>
               </>
@@ -119,27 +121,60 @@ export const Task = ({ task, columnId, onToggleComplete }: TaskProps) => {
         </div>
 
         <div className="flex items-center gap-3 relative w-17.5">
-          <motion.div
-            className="flex gap-1 items-center text-xs text-lightGray absolute right-0"
-            variants={branchVariants}
-          >
+          <AnimatePresence>
             {task.subtasks.length > 0 && (
-              <>
+              <motion.button
+                className="flex gap-1 items-center text-xs text-lightGray absolute right-0 cursor-pointer"
+                variants={branchVariants}
+                type="button"
+                onClick={handleToggleDetails}
+                onPointerDown={(e) => e.preventDefault()}
+              >
                 <span>{task.subtasks.length}</span>
                 <BranchIcon className="h-2.5" />
-              </>
+              </motion.button>
             )}
-          </motion.div>
+          </AnimatePresence>
 
-          <motion.button
-            type="button"
-            className="text-accentBlue absolute right-0 cursor-pointer"
-            variants={playVariants}
-          >
-            <PlayIcon className="h-4.5 fill-none" />
-          </motion.button>
+          <AnimatePresence>
+            <motion.div
+              className="text-accentBlue absolute right-0"
+              variants={playVariants}
+            >
+              <TaskTimerButton
+                taskId={task.id}
+                columnId={columnId}
+                isRunning={task.timer.isRunning}
+                startTaskTimer={actions.startTaskTimer}
+                stopTaskTimer={actions.stopTaskTimer}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
+      <AnimatePresence initial={false}>
+        {isDetailsOpen && (
+          <motion.div
+            className="border-t border-t-secondaryWhite pt-2"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+          >
+            <div className="border-t border-t-secondaryWhite pt-2 flex flex-col gap-4">
+              {task.subtasks.map((subtask) => (
+                <Subtask
+                  key={subtask.id}
+                  subtask={subtask}
+                  taskId={task.id}
+                  columnId={columnId}
+                  toggleSubtaskCompletion={actions.toggleSubtaskCompletion}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

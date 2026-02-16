@@ -6,14 +6,21 @@ export type Task = {
   dueDate: Date;
   status: TaskStatus;
   isDone: boolean;
+  timer: TaskTimer;
   subtasks: Subtask[];
 };
 
-type Subtask = {
+export type Subtask = {
   id: number;
   name: string;
+  isDone: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const TASK_STATUSES = ["toDo", "inProgress", "done"];
+export type TaskTimer = {
+  startedAt: number | null;
+  isRunning: boolean;
+};
+
+export const TASK_STATUSES = ["toDo", "inProgress", "done"] as const;
+
 export type TaskStatus = (typeof TASK_STATUSES)[number];

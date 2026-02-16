@@ -1,0 +1,6 @@
+export const formatTime = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+
+  return `${h}ч ${m}м`;
+};

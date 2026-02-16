@@ -1,6 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 
 import { Task } from "@/entities/task";
+import type { TaskActions } from "@/entities/task/api/taskActions";
 
 import { DotsIcon, PlusIcon } from "@/shared/icons";
 
@@ -8,11 +9,10 @@ import type { Column as ColumnModel } from "../model/types";
 
 type ColumnProps = {
   column: ColumnModel;
-  // eslint-disable-next-line no-unused-vars
-  toggleTaskCompletion: (taskId: number, columnId: number) => void;
+  taskActions: TaskActions;
 };
 
-export const Column = ({ column, toggleTaskCompletion }: ColumnProps) => {
+export const Column = ({ column, taskActions }: ColumnProps) => {
   const { setNodeRef } = useDroppable({
     id: column.id,
     data: {
@@ -45,7 +45,7 @@ export const Column = ({ column, toggleTaskCompletion }: ColumnProps) => {
           key={task.id}
           task={task}
           columnId={column.id}
-          onToggleComplete={toggleTaskCompletion}
+          actions={taskActions}
         />
       ))}
     </div>

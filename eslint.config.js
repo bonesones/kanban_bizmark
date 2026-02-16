@@ -48,9 +48,15 @@ export default [
     },
 
     rules: {
+      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
-        { ignoreRestSiblings: true },
+        {
+          ignoreRestSiblings: true,
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
       ],
       "arrow-body-style": [2, "as-needed"],
       curly: "error",
