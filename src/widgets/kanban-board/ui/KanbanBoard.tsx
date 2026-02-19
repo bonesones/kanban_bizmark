@@ -1,4 +1,11 @@
-import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
+import {
+  closestCenter,
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
 import { useState } from "react";
 
 import { useBoardActions } from "@/features/board-actions";
@@ -22,6 +29,14 @@ export const KanbanBoard = () => {
     columnId: number;
   } | null>(null);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 6,
+      },
+    }),
+  );
+
   const columns = useBoardStore((state) => state.board.columns);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -44,6 +59,10 @@ export const KanbanBoard = () => {
     setSelectedTask({ task, columnId });
   };
 
+  const handleCloseTaskDetails = () => {
+    setSelectedTask(null);
+  };
+
   return (
     <div className="bg-white rounded-tl-[10px] pl-5 h-full">
       <KanbanBoardHeader />
@@ -52,6 +71,7 @@ export const KanbanBoard = () => {
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
           <div className="overflow-x-auto flex h-full gap-5">
             {columns.map((column) => (
@@ -70,6 +90,8 @@ export const KanbanBoard = () => {
             <TaskDetails
               task={selectedTask.task}
               columnId={selectedTask.columnId}
+              taskActions={taskActions}
+              onClose={handleCloseTaskDetails}
             />
           )}
         </Drawer>

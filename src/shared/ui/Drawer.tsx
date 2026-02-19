@@ -7,33 +7,30 @@ type DrawerProps = {
   isOpen: boolean;
 };
 
-export const Drawer = ({ children, isOpen }: DrawerProps) => {
-  if (!isOpen) {
-    return null;
-  }
-
-  return createPortal(
+export const Drawer = ({ children, isOpen }: DrawerProps) =>
+  createPortal(
     <AnimatePresence>
-      <motion.div
-        variants={{
-          hidden: { x: "100%" },
-          visible: { x: 0 },
-          exit: { x: "100%" },
-        }}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        transition={{
-          type: "spring",
-          damping: 25,
-          stiffness: 200,
-          duration: 0.3,
-        }}
-        className="fixed right-0 top-0 bottom-0 z-1000 bg-white h-screen w-2xl"
-      >
-        {children}
-      </motion.div>
+      {isOpen && (
+        <motion.div
+          variants={{
+            hidden: { x: "100%" },
+            visible: { x: 0 },
+            exit: { x: "100%" },
+          }}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={{
+            type: "spring",
+            damping: 25,
+            stiffness: 200,
+            duration: 0.3,
+          }}
+          className="fixed right-0 top-0 bottom-0 z-1000 bg-white h-screen w-4xl"
+        >
+          {children}
+        </motion.div>
+      )}
     </AnimatePresence>,
     document.body,
   );
-};

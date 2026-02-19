@@ -14,3 +14,6 @@ export { PlayIcon } from "./PlayIcon";
 export { BranchIcon } from "./BranchIcon";
 export { CheckpointFilledIcon } from "./CheckpointFilledIcon";
 export { PlayActiveIcon } from "./PlayActiveIcon";
+export { CheckIcon } from "./CheckIcon";
+export { PaperClipIcon } from "./PaperClip";
+export { ArrowRightIcon } from "./ArrowRightIcon";

@@ -1,6 +1,11 @@
-export const formatTime = (seconds: number) => {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 
-  return `${h}ч ${m}м`;
+dayjs.extend(duration);
+
+export const formatTime = (seconds: number) => {
+  const time = dayjs.duration(seconds, "seconds");
+  const timeFormatted = `${String(Math.floor(time.asHours())).padStart(2, "0")} ч. ${String(time.minutes()).padStart(2, "0")} м.`;
+
+  return timeFormatted;
 };

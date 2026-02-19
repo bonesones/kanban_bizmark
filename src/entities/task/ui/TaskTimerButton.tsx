@@ -17,12 +17,18 @@ export const TaskTimerButton = ({
   startTaskTimer,
   stopTaskTimer,
 }: TaskTimerProps) => {
-  const toggleTimer = isRunning ? stopTaskTimer : startTaskTimer;
+  const handleToggleTimer = () => {
+    if (isRunning) {
+      stopTaskTimer(taskId, columnId);
+    } else {
+      startTaskTimer(taskId, columnId);
+    }
+  };
 
   return (
     <button
       type="button"
-      onClick={() => toggleTimer(taskId, columnId)}
+      onClick={handleToggleTimer}
       className="cursor-pointer w-full h-full"
       onPointerDown={(e) => e.stopPropagation()}
     >

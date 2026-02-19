@@ -2,11 +2,11 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 
 import { BranchIcon } from "@/shared/icons";
+import { formatTime } from "@/shared/lib";
 
 import { user } from "@/assets";
 
@@ -21,7 +21,6 @@ import { TaskTimer } from "./TaskTimer";
 import { TaskTimerButton } from "./TaskTimerButton";
 
 dayjs.locale("ru");
-dayjs.extend(duration);
 
 type TaskProps = {
   task: TaskModel;
@@ -31,7 +30,7 @@ type TaskProps = {
 };
 
 export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isSubtasksOpen, setIsSubtasksOpen] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -50,7 +49,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
     background: "white",
     borderRadius: 6,
     boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-    cursor: "grab",
+    cursor: isDragging ? "grabbing" : "pointer",
     position: "relative",
     zIndex: isDragging ? 999 : "auto",
   };
@@ -70,11 +69,8 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
   const dueDate = dayjs(task.dueDate);
   const dueDateFormatted = dueDate.format("D MMMM");
 
-  const timePlanned = dayjs.duration(task.timePlanned, "seconds");
-  const timePlannedFormatted = `${String(Math.floor(timePlanned.asHours())).padStart(2, "0")} ч. ${String(timePlanned.minutes()).padStart(2, "0")} м.`;
-
-  const timeSpent = dayjs.duration(task.timeSpent, "seconds");
-  const timeSpentFormatted = `${String(Math.floor(timeSpent.asHours())).padStart(2, "0")} ч. ${String(timeSpent.minutes()).padStart(2, "0")} м.`;
+  const timePlannedFormatted = formatTime(task.timePlanned);
+  const timeSpentFormatted = formatTime(task.timeSpent);
 
   const dateClassName = clsx(
     today.isBefore(dueDate, "day") || today.isSame(dueDate, "day")
@@ -82,8 +78,8 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
       : "text-accentRed",
   );
 
-  const handleToggleDetails = () => {
-    setIsDetailsOpen((prev) => !prev);
+  const handleToggleSubtasks = () => {
+    setIsSubtasksOpen((prev) => !prev);
   };
 
   const handleTaskClick = (e: React.MouseEvent) => {
@@ -149,7 +145,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
                     className="flex gap-1 items-center text-xs text-lightGray absolute right-0 cursor-pointer"
                     variants={branchVariants}
                     type="button"
-                    onClick={handleToggleDetails}
+                    onClick={handleToggleSubtasks}
                     onPointerDown={(e) => e.preventDefault()}
                   >
                     <span>{task.subtasks.length}</span>
@@ -178,7 +174,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
               <button
                 type="button"
                 className="flex gap-1 items-center text-xs text-lightGray  cursor-pointer"
-                onClick={handleToggleDetails}
+                onClick={handleToggleSubtasks}
                 onPointerDown={(e) => e.preventDefault()}
               >
                 <span>{task.subtasks.length}</span>
@@ -208,7 +204,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
         </div>
       </div>
       <AnimatePresence initial={false}>
-        {isDetailsOpen && (
+        {isSubtasksOpen && (
           <motion.div
             className="border-t border-t-secondaryWhite pt-2"
             initial={{ height: 0, opacity: 0 }}
