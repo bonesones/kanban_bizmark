@@ -27,9 +27,10 @@ type TaskProps = {
   task: TaskModel;
   columnId: number;
   actions: TaskActions;
+  onClick?: (task: TaskModel, columnId: number) => void;
 };
 
-export const Task = ({ task, columnId, actions }: TaskProps) => {
+export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -85,6 +86,16 @@ export const Task = ({ task, columnId, actions }: TaskProps) => {
     setIsDetailsOpen((prev) => !prev);
   };
 
+  const handleTaskClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+
+    if (target.closest("button")) {
+      return;
+    }
+
+    onClick?.(task, columnId);
+  };
+
   return (
     <motion.div
       ref={setNodeRef}
@@ -92,6 +103,7 @@ export const Task = ({ task, columnId, actions }: TaskProps) => {
       className="bg-white rounded-[10px] shadow-md pt-2 pb-4 px-4 flex flex-col gap-3 group"
       initial="initial"
       whileHover="hover"
+      onClick={handleTaskClick}
       {...listeners}
       {...attributes}
     >

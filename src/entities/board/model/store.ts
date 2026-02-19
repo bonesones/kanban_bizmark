@@ -298,19 +298,6 @@ export const useBoardStore = create<BoardState>()(
                 return {
                   ...column,
                   tasks: column.tasks.map((task) => {
-                    if (task.timer.isRunning) {
-                      const diff = now - (task.timer.startedAt ?? now);
-
-                      return {
-                        ...task,
-                        timeSpent: task.timeSpent + Math.floor(diff / 1000),
-                        timer: {
-                          startedAt: null,
-                          isRunning: false,
-                        },
-                      };
-                    }
-
                     if (task.id === taskId) {
                       return {
                         ...task,

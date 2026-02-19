@@ -1,18 +1,26 @@
 import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
+import { useState } from "react";
 
 import { useBoardActions } from "@/features/board-actions";
 import { useTaskActions } from "@/features/task-actions";
 
 import { useBoardStore } from "@/entities/board";
 import { Column } from "@/entities/column";
+import { TaskDetails, type TaskModel } from "@/entities/task";
 
 import { PlusIcon } from "@/shared/icons";
+import { Drawer } from "@/shared/ui";
 
 import { KanbanBoardHeader } from "./KanbanHeader";
 
 export const KanbanBoard = () => {
   const { addColumn } = useBoardActions();
   const taskActions = useTaskActions();
+
+  const [selectedTask, setSelectedTask] = useState<{
+    task: TaskModel;
+    columnId: number;
+  } | null>(null);
 
   const columns = useBoardStore((state) => state.board.columns);
 
@@ -32,6 +40,10 @@ export const KanbanBoard = () => {
     taskActions.moveTask(taskId, columnId);
   };
 
+  const handleTaskClick = (task: TaskModel, columnId: number) => {
+    setSelectedTask({ task, columnId });
+  };
+
   return (
     <div className="bg-white rounded-tl-[10px] pl-5 h-full">
       <KanbanBoardHeader />
@@ -47,10 +59,20 @@ export const KanbanBoard = () => {
                 key={column.id}
                 column={column}
                 taskActions={taskActions}
+                onTaskClick={handleTaskClick}
               />
             ))}
           </div>
         </DndContext>
+
+        <Drawer isOpen={!!selectedTask}>
+          {selectedTask && (
+            <TaskDetails
+              task={selectedTask.task}
+              columnId={selectedTask.columnId}
+            />
+          )}
+        </Drawer>
 
         <div className="flex-1 pl-5 min-w-96 shrink-0">
           <button
