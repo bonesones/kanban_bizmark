@@ -1,9 +1,11 @@
 import { PlayActiveIcon, PlayIcon } from "@/shared/icons";
 
 import type { TaskActions } from "../api/taskActions";
+import { useEffect } from "react";
 
 type TaskTimerProps = {
   taskId: number;
+  isTaskDone: boolean;
   columnId: number;
   isRunning: boolean;
   startTaskTimer: TaskActions["startTaskTimer"];
@@ -12,11 +14,19 @@ type TaskTimerProps = {
 
 export const TaskTimerButton = ({
   taskId,
+  isTaskDone,
   columnId,
   isRunning,
   startTaskTimer,
   stopTaskTimer,
 }: TaskTimerProps) => {
+
+  useEffect(() => {
+    if (isTaskDone && isRunning) {
+      stopTaskTimer(taskId, columnId)
+    }
+  }, [isTaskDone]) 
+
   const handleToggleTimer = () => {
     if (isRunning) {
       stopTaskTimer(taskId, columnId);
@@ -25,14 +35,15 @@ export const TaskTimerButton = ({
     }
   };
 
+
   return (
     <button
       type="button"
-      onClick={handleToggleTimer}
+      onClick={isTaskDone ? undefined : handleToggleTimer}
       className="cursor-pointer w-full h-full"
       onPointerDown={(e) => e.stopPropagation()}
     >
-      {isRunning ? (
+      {isRunning && !isTaskDone ? (
         <PlayActiveIcon className="h-full" />
       ) : (
         <PlayIcon className="h-full text-accentBlue" />

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 
-import { CalendarIcon } from "@/shared/icons/CalendarIcon";
+import { CalendarIcon } from "@/shared/icons";
 
 import { user } from "@/assets";
 

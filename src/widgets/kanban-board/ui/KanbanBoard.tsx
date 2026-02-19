@@ -13,7 +13,7 @@ import { useTaskActions } from "@/features/task-actions";
 
 import { useBoardStore } from "@/entities/board";
 import { Column } from "@/entities/column";
-import { TaskDetails, type TaskModel } from "@/entities/task";
+import { TaskDetails } from "@/entities/task";
 
 import { PlusIcon } from "@/shared/icons";
 import { Drawer } from "@/shared/ui";
@@ -24,8 +24,8 @@ export const KanbanBoard = () => {
   const { addColumn } = useBoardActions();
   const taskActions = useTaskActions();
 
-  const [selectedTask, setSelectedTask] = useState<{
-    task: TaskModel;
+  const [selectedTaskId, setSelectedTaskId] = useState<{
+    taskId: number;
     columnId: number;
   } | null>(null);
 
@@ -38,6 +38,8 @@ export const KanbanBoard = () => {
   );
 
   const columns = useBoardStore((state) => state.board.columns);
+
+  const selectedTask = selectedTaskId ? columns.find(col => col.id === selectedTaskId.columnId)?.tasks.find(task => task.id === selectedTaskId.taskId) : null;
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -55,13 +57,15 @@ export const KanbanBoard = () => {
     taskActions.moveTask(taskId, columnId);
   };
 
-  const handleTaskClick = (task: TaskModel, columnId: number) => {
-    setSelectedTask({ task, columnId });
+  const handleTaskClick = (taskId: number, columnId: number) => {
+    setSelectedTaskId({ taskId, columnId });
   };
 
   const handleCloseTaskDetails = () => {
-    setSelectedTask(null);
+    setSelectedTaskId(null);
   };
+
+
 
   return (
     <div className="bg-white rounded-tl-[10px] pl-5 h-full">
@@ -86,10 +90,10 @@ export const KanbanBoard = () => {
         </DndContext>
 
         <Drawer isOpen={!!selectedTask}>
-          {selectedTask && (
+          {selectedTask && selectedTaskId && (
             <TaskDetails
-              task={selectedTask.task}
-              columnId={selectedTask.columnId}
+              task={selectedTask}
+              columnId={selectedTaskId?.columnId}
               taskActions={taskActions}
               onClose={handleCloseTaskDetails}
             />

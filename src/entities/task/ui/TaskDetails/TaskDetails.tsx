@@ -1,7 +1,9 @@
 import type { TaskActions, TaskModel } from "../..";
+import { TaskDetailsComments } from "./TaskDetailsComments";
 
 import { TaskDetailsHeader } from "./TaskDetailsHeader";
 import { TaskDetailsMeta } from "./TaskDetailsMeta";
+import { TaskDetailsSubtasks } from "./TaskDetailsSubtasks";
 
 type TaskDetailsProps = {
   task: TaskModel;
@@ -16,6 +18,7 @@ export const TaskDetails = ({
   taskActions,
   onClose,
 }: TaskDetailsProps) => {
+  
   const handleToggleTimer = () => {
     if (task.timer.isRunning) {
       taskActions.stopTaskTimer(task.id, columnId);
@@ -33,11 +36,17 @@ export const TaskDetails = ({
         onToggleTimer={handleToggleTimer}
         onClose={onClose}
       />
-
-      <div className="px-6 pt-3.5">
+      <div className="flex flex-col">
         <h4 className="text-2xl text-textMain font-semibold">{task.name}</h4>
 
         <TaskDetailsMeta />
+
+   
+        <h5 className="text-gray text-sm">Подзадачи</h5>
+
+        <TaskDetailsSubtasks task={task}  columnId={columnId} onSubtaskComplete={taskActions.toggleSubtaskCompletion}/>
+    
+        <TaskDetailsComments />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import type { TaskModel } from "@/entities/task";
 
 import type { KanbanBoardModel } from "..";
 
-import { MOCK_COLUMNS } from "../api/mock_data";
+import { MOCK_COLUMNS } from "../api/mockData";
 
 export type BoardState = {
   board: KanbanBoardModel;
@@ -39,7 +39,6 @@ const updateTaskInColumn = (
         },
   );
 
-const columns: ColumnModel[] = MOCK_COLUMNS;
 
 export const useBoardStore = create<BoardState>()(
   persist(
@@ -47,7 +46,7 @@ export const useBoardStore = create<BoardState>()(
       board: {
         id: 1,
         name: "Проект Лиц",
-        columns: columns,
+        columns: MOCK_COLUMNS,
         status: "В работе",
       },
 

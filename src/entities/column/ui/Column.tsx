@@ -1,6 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 
-import { Task, type TaskModel } from "@/entities/task";
+import { Task } from "@/entities/task";
 import type { TaskActions } from "@/entities/task/api/taskActions";
 
 import { DotsIcon, PlusIcon } from "@/shared/icons";
@@ -10,7 +10,7 @@ import type { Column as ColumnModel } from "../model/types";
 type ColumnProps = {
   column: ColumnModel;
   taskActions: TaskActions;
-  onTaskClick?: (task: TaskModel, columnId: number) => void;
+  onTaskClick?: (taskId: number, columnId: number) => void;
 };
 
 export const Column = ({ column, taskActions, onTaskClick }: ColumnProps) => {

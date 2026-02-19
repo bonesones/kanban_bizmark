@@ -4,6 +4,7 @@ import type { TaskActions } from "../api/taskActions";
 import type { Subtask as SubtaskModel } from "../model/task";
 
 import { TaskCompletionButton } from "./TaskCompletionButton";
+import clsx from "clsx";
 
 type SubtaskProps = {
   subtask: SubtaskModel;
@@ -18,7 +19,7 @@ export const Subtask = ({
   columnId,
   toggleSubtaskCompletion,
 }: SubtaskProps) => (
-  <div className="flex justify-between">
+  <div className={clsx("flex justify-between", subtask.isDone && "opacity-50")}>
     <div className="flex gap-2 items-center">
       <TaskCompletionButton
         type="subtask"

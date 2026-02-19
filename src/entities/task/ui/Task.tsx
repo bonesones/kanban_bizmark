@@ -26,7 +26,7 @@ type TaskProps = {
   task: TaskModel;
   columnId: number;
   actions: TaskActions;
-  onClick?: (task: TaskModel, columnId: number) => void;
+  onClick?: (taskId: number, columnId: number) => void;
 };
 
 export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
@@ -89,9 +89,10 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
       return;
     }
 
-    onClick?.(task, columnId);
+    onClick?.(task.id, columnId);
   };
 
+  console.log(task.timer.isRunning, 'task timer is running')
   return (
     <motion.div
       ref={setNodeRef}
@@ -137,7 +138,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
         </div>
 
         <div className="flex items-center justify-end gap-3 relative w-17.5">
-          {!task.timer.isRunning ? (
+          {!task.timer.isRunning  ? (
             <>
               <AnimatePresence>
                 {task.subtasks.length > 0 && (
@@ -162,6 +163,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
                   <TaskTimerButton
                     taskId={task.id}
                     columnId={columnId}
+                    isTaskDone={task.isDone}
                     isRunning={task.timer.isRunning}
                     startTaskTimer={actions.startTaskTimer}
                     stopTaskTimer={actions.stopTaskTimer}
@@ -180,6 +182,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
                 <span>{task.subtasks.length}</span>
                 <BranchIcon className="h-2.5" />
               </button>
+
               <motion.div
                 animate={{
                   scale: !task.timer.isRunning ? 1 : 1.33,
@@ -197,6 +200,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
                   isRunning={task.timer.isRunning}
                   startTaskTimer={actions.startTaskTimer}
                   stopTaskTimer={actions.stopTaskTimer}
+                  isTaskDone={task.isDone}
                 />
               </motion.div>
             </>
