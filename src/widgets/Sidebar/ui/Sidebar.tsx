@@ -1,4 +1,11 @@
 import {
+  FavoriteItem,
+  type FavoriteItemProps,
+} from "@/widgets/Sidebar/ui/FavoriteItem";
+import { NavLink, type NavLinkProps } from "@/widgets/Sidebar/ui/NavLink";
+import { TeamItem, type TeamItemProps } from "@/widgets/Sidebar/ui/TeamItem";
+
+import {
   ArrowDownIcon,
   BurgerIcon,
   CheckpointIcon,
@@ -8,72 +15,60 @@ import {
 
 import { logo } from "@/assets";
 
-import { FavoriteItem, type FavoriteItemProps } from "./FavoriteItem";
-import { NavLink, type NavLinkProps } from "./NavLink";
-import { TeamItem, type TeamItemProps } from "./TeamItem";
+export const Sidebar = () => (
+  <aside className="w-72">
+    <div className="flex justify-between items-center">
+      <img src={logo} className="h-9 w-24" alt="logo" />
 
-export const Sidebar = () => {
-  return (
-    <aside className="w-72">
-      <div className="flex justify-between items-center">
-        <img src={logo} className="h-9 w-24" alt="logo" />
+      <button type="button" className="cursor-pointer">
+        <BurgerIcon className="h-3.5 text-lightGray" />
+      </button>
+    </div>
 
-        <button type="button" className="cursor-pointer">
-          <BurgerIcon className="h-3.5 text-lightGray" />
-        </button>
-      </div>
+    <nav className="mt-7">
+      <ul className="text-sm font-medium flex flex-col gap-6">
+        {navLinks.map((props, i) => (
+          <li key={i}>
+            <NavLink {...props} />
+          </li>
+        ))}
+      </ul>
+    </nav>
 
-      <nav className="mt-7">
-        <ul className="text-sm font-medium flex flex-col gap-6">
-          {navLinks.map((props, i) => {
-            return (
-              <li key={i}>
-                <NavLink {...props} />
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+    <div className="mt-7">
+      <span className="text-xs font-bold text-lightGray">Избранное</span>
 
-      <div className="mt-7">
-        <span className="text-xs font-bold text-lightGray">Избранное</span>
+      <ul className="flex flex-col gap-4 mt-2">
+        {favorites.map((props, i) => (
+          <li key={i}>
+            <FavoriteItem {...props} />
+          </li>
+        ))}
+      </ul>
 
-        <ul className="flex flex-col gap-4 mt-2">
-          {favorites.map((props, i) => {
-            return (
-              <li key={i}>
-                <FavoriteItem {...props} />
-              </li>
-            );
-          })}
-        </ul>
+      <button className="text-lightGray flex items-center gap-2 cursor-pointer mt-3">
+        <span className="text-xs leading-none">Раскрыть весь список</span>
+        <ArrowDownIcon className="h-1" />
+      </button>
+    </div>
 
-        <button className="text-lightGray flex items-center gap-2 cursor-pointer mt-3">
-          <span className="text-xs leading-none">Раскрыть весь список</span>
-          <ArrowDownIcon className="h-1" />
-        </button>
-      </div>
+    <div className="mt-5">
+      <span className="text-xs font-bold text-lightGray">Команды</span>
 
-      <div className="mt-5">
-        <span className="text-xs font-bold text-lightGray">Команды</span>
-
-        <ul className="flex flex-col gap-4 font-semibold mt-2">
-          {teams.map((props, i) => {
-            return (
-              <li key={i}>
-                <TeamItem {...props} />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </aside>
-  );
-};
+      <ul className="flex flex-col gap-4 font-semibold mt-2">
+        {teams.map((props, i) => (
+          <li key={i}>
+            <TeamItem {...props} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </aside>
+);
 
 // ----------------- Mock data -----------------
 
-const favorites: FavoriteItemProps[] = [
+const favorites = [
   {
     title: "Электротовары",
     color: "green",
@@ -90,9 +85,9 @@ const favorites: FavoriteItemProps[] = [
     title: "Автошкола “Автолицей”",
     color: "blue",
   },
-];
+] satisfies FavoriteItemProps[];
 
-const navLinks: NavLinkProps[] = [
+const navLinks = [
   {
     icon: <HomeIcon className="h-4" />,
     text: "Дашборд",
@@ -108,9 +103,9 @@ const navLinks: NavLinkProps[] = [
     text: "Проекты",
     href: "#",
   },
-];
+] satisfies NavLinkProps[];
 
-const teams: TeamItemProps[] = [
+const teams = [
   {
     title: "Программисты",
   },
@@ -120,4 +115,4 @@ const teams: TeamItemProps[] = [
   {
     title: "Дизайнеры",
   },
-];
+] satisfies TeamItemProps[];

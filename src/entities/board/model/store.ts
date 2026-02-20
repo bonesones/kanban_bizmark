@@ -39,7 +39,6 @@ const updateTaskInColumn = (
         },
   );
 
-
 export const useBoardStore = create<BoardState>()(
   persist(
     (set) => ({

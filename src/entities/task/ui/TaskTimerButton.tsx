@@ -1,7 +1,8 @@
+import { useEffect } from "react";
+
 import { PlayActiveIcon, PlayIcon } from "@/shared/icons";
 
 import type { TaskActions } from "../api/taskActions";
-import { useEffect } from "react";
 
 type TaskTimerProps = {
   taskId: number;
@@ -20,12 +21,11 @@ export const TaskTimerButton = ({
   startTaskTimer,
   stopTaskTimer,
 }: TaskTimerProps) => {
-
   useEffect(() => {
     if (isTaskDone && isRunning) {
-      stopTaskTimer(taskId, columnId)
+      stopTaskTimer(taskId, columnId);
     }
-  }, [isTaskDone]) 
+  }, [isTaskDone]);
 
   const handleToggleTimer = () => {
     if (isRunning) {
@@ -34,7 +34,6 @@ export const TaskTimerButton = ({
       startTaskTimer(taskId, columnId);
     }
   };
-
 
   return (
     <button

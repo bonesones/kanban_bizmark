@@ -38,23 +38,21 @@ export const TaskDetailsHeader = ({
   return (
     <div className="flex justify-between py-3.5 px-6 border-b border-bgPrimary">
       <div className="flex gap-4 items-center">
-        {
-          task.timer.isRunning ? (
-            <ButtonWithIcon
-              icon={<PlayIcon className="h-[13.5px]" />}
-              title="Завершить работу над задачей"
-              onClick={onToggleTimer}
-              className="bg-accentBlue text-white"
-            />
-          ) : (
-            <ButtonWithIcon
-              icon={<PlayIcon className="h-[13.5px]" />}
-              title="Работать над задачей"
-              onClick={onToggleTimer}
-              className="bg-bgPrimary text-black"
-            />
-          )
-        }
+        {task.timer.isRunning ? (
+          <ButtonWithIcon
+            icon={<PlayIcon className="h-[13.5px]" />}
+            title="Завершить работу над задачей"
+            onClick={onToggleTimer}
+            className="bg-accentBlue text-white"
+          />
+        ) : (
+          <ButtonWithIcon
+            icon={<PlayIcon className="h-[13.5px]" />}
+            title="Работать над задачей"
+            onClick={onToggleTimer}
+            className="bg-bgPrimary text-black"
+          />
+        )}
 
         <div className="text-sm">
           {task.isDone ? (
@@ -69,23 +67,21 @@ export const TaskDetailsHeader = ({
       </div>
 
       <div className="flex gap-4">
-        {
-          task.isDone ? (
-            <ButtonWithIcon
-              icon={<CheckIcon className="h-[7.5px]" />}
-              title="Задача завершена"
-              onClick={handleTaskComplete}
-              className="bg-bgMain"
-            />
-          ) : (
-            <ButtonWithIcon
-              icon={<CheckIcon className="h-[7.5px]" />}
-              title="Завершить задачу"
-              onClick={handleTaskComplete}
-              className="bg-green text-white "
-            />
-          )
-        }
+        {task.isDone ? (
+          <ButtonWithIcon
+            icon={<CheckIcon className="h-[7.5px]" />}
+            title="Задача завершена"
+            onClick={handleTaskComplete}
+            className="bg-bgMain"
+          />
+        ) : (
+          <ButtonWithIcon
+            icon={<CheckIcon className="h-[7.5px]" />}
+            title="Завершить задачу"
+            onClick={handleTaskComplete}
+            className="bg-green text-white "
+          />
+        )}
 
         <IconButton
           icon={<PaperClipIcon className="h-3.5" />}

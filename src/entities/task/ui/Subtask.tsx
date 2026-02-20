@@ -1,10 +1,11 @@
+import clsx from "clsx";
+
 import { user } from "@/assets";
 
 import type { TaskActions } from "../api/taskActions";
 import type { Subtask as SubtaskModel } from "../model/task";
 
 import { TaskCompletionButton } from "./TaskCompletionButton";
-import clsx from "clsx";
 
 type SubtaskProps = {
   subtask: SubtaskModel;

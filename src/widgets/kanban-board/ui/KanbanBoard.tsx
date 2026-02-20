@@ -39,7 +39,11 @@ export const KanbanBoard = () => {
 
   const columns = useBoardStore((state) => state.board.columns);
 
-  const selectedTask = selectedTaskId ? columns.find(col => col.id === selectedTaskId.columnId)?.tasks.find(task => task.id === selectedTaskId.taskId) : null;
+  const selectedTask = selectedTaskId
+    ? columns
+        .find((col) => col.id === selectedTaskId.columnId)
+        ?.tasks.find((task) => task.id === selectedTaskId.taskId)
+    : null;
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -64,8 +68,6 @@ export const KanbanBoard = () => {
   const handleCloseTaskDetails = () => {
     setSelectedTaskId(null);
   };
-
-
 
   return (
     <div className="bg-white rounded-tl-[10px] pl-5 h-full">

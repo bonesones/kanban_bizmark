@@ -8,9 +8,9 @@ import React, { useState } from "react";
 import { BranchIcon } from "@/shared/icons";
 import { formatTime } from "@/shared/lib";
 
-import { user } from "@/assets";
-
 import "dayjs/locale/ru";
+
+import { user } from "@/assets";
 
 import type { TaskActions } from "../api/taskActions";
 import type { Task as TaskModel } from "../model/task";
@@ -92,7 +92,6 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
     onClick?.(task.id, columnId);
   };
 
-  console.log(task.timer.isRunning, 'task timer is running')
   return (
     <motion.div
       ref={setNodeRef}
@@ -138,7 +137,7 @@ export const Task = ({ task, columnId, actions, onClick }: TaskProps) => {
         </div>
 
         <div className="flex items-center justify-end gap-3 relative w-17.5">
-          {!task.timer.isRunning  ? (
+          {!task.timer.isRunning ? (
             <>
               <AnimatePresence>
                 {task.subtasks.length > 0 && (
