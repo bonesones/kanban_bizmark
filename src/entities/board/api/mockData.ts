@@ -14,6 +14,18 @@ export const MOCK_COLUMNS = [
         status: "toDo",
         isDone: false,
         timer: { startedAt: null, isRunning: false },
+        comments: [
+          {
+            id: 1,
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet hendrerit ipsum vel gravida. Nullam auctor nisl leo, eu luctus ex eleifend nec. Praesent mauris odio, dapibus sit amet ipsum eget, venenatis tempus nisl.",
+            publishedAt: new Date(Date.now() - 5 * 60 * 1000),
+          },
+          {
+            id: 2,
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet hendrerit ipsum vel gravida. Nullam auctor nisl leo, eu luctus ex eleifend nec. Praesent mauris odio, dapibus sit amet ipsum eget, venenatis tempus nisl.",
+            publishedAt: new Date(Date.now() - 12 * 60 * 1000),
+          },
+        ],
         subtasks: [
           {
             id: 2,
@@ -42,6 +54,13 @@ export const MOCK_COLUMNS = [
         status: "toDo",
         isDone: false,
         timer: { startedAt: null, isRunning: false },
+        comments: [
+          {
+            id: 3,
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet hendrerit ipsum vel gravida. Nullam auctor nisl leo, eu luctus ex eleifend nec. Praesent mauris odio, dapibus sit amet ipsum eget, venenatis tempus nisl.",
+            publishedAt: new Date(Date.now() - 10 * 60 * 1000),
+          },
+        ],
         subtasks: [
           {
             id: 5,
@@ -70,6 +89,7 @@ export const MOCK_COLUMNS = [
         status: "toDo",
         isDone: false,
         timer: { startedAt: null, isRunning: false },
+        comments: [],
         subtasks: [
           {
             id: 8,
@@ -98,6 +118,13 @@ export const MOCK_COLUMNS = [
         status: "toDo",
         isDone: false,
         timer: { startedAt: null, isRunning: false },
+        comments: [
+          {
+            id: 4,
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet hendrerit ipsum vel gravida. Nullam auctor nisl leo, eu luctus ex eleifend nec. Praesent mauris odio, dapibus sit amet ipsum eget, venenatis tempus nisl.",
+            publishedAt: new Date(Date.now() - 30 * 60 * 1000),
+          },
+        ],
         subtasks: [
           {
             id: 11,
@@ -126,6 +153,18 @@ export const MOCK_COLUMNS = [
         status: "toDo",
         isDone: false,
         timer: { startedAt: null, isRunning: false },
+        comments: [
+          {
+            id: 5,
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet hendrerit ipsum vel gravida. Nullam auctor nisl leo, eu luctus ex eleifend nec. Praesent mauris odio, dapibus sit amet ipsum eget, venenatis tempus nisl.",
+            publishedAt: new Date(Date.now() - 10 * 60 * 1000),
+          },
+          {
+            id: 5,
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet hendrerit ipsum vel gravida. Nullam auctor nisl leo, eu luctus ex eleifend nec. Praesent mauris odio, dapibus sit amet ipsum eget, venenatis tempus nisl.",
+            publishedAt: new Date(Date.now() - 10 * 60 * 1000),
+          },
+        ],
         subtasks: [
           {
             id: 14,

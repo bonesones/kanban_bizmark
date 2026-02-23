@@ -6,7 +6,7 @@ import {
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useBoardActions } from "@/features/board-actions";
 import { useTaskActions } from "@/features/task-actions";
@@ -15,6 +15,7 @@ import { useBoardStore } from "@/entities/board";
 import { Column } from "@/entities/column";
 import { TaskDetails } from "@/entities/task";
 
+import { useClickOutside } from "@/shared/hooks";
 import { PlusIcon } from "@/shared/icons";
 import { Drawer } from "@/shared/ui";
 
@@ -23,6 +24,8 @@ import { KanbanBoardHeader } from "./KanbanHeader";
 export const KanbanBoard = () => {
   const { addColumn } = useBoardActions();
   const taskActions = useTaskActions();
+
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const [selectedTaskId, setSelectedTaskId] = useState<{
     taskId: number;
@@ -69,6 +72,8 @@ export const KanbanBoard = () => {
     setSelectedTaskId(null);
   };
 
+  useClickOutside(drawerRef, handleCloseTaskDetails);
+
   return (
     <div className="bg-white rounded-tl-[10px] pl-5 h-full">
       <KanbanBoardHeader />
@@ -91,7 +96,7 @@ export const KanbanBoard = () => {
           </div>
         </DndContext>
 
-        <Drawer isOpen={!!selectedTask}>
+        <Drawer isOpen={!!selectedTask} drawerRef={drawerRef}>
           {selectedTask && selectedTaskId && (
             <TaskDetails
               task={selectedTask}

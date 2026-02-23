@@ -8,6 +8,7 @@ export type Task = {
   isDone: boolean;
   timer: TaskTimer;
   subtasks: Subtask[];
+  comments: Comment[];
 };
 
 export type Subtask = {
@@ -19,6 +20,12 @@ export type Subtask = {
 export type TaskTimer = {
   startedAt: number | null;
   isRunning: boolean;
+};
+
+export type Comment = {
+  id: number;
+  text: string;
+  publishedAt: Date;
 };
 
 export const TASK_STATUSES = ["toDo", "inProgress", "done"] as const;

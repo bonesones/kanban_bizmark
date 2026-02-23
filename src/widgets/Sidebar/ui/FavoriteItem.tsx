@@ -17,4 +17,5 @@ export const FavoriteItem = ({ title, color }: FavoriteItemProps) => {
 export type FavoriteItemProps = {
   title: string;
   color: "green" | "blue";
+  boardId: number;
 };

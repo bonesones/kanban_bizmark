@@ -6,16 +6,16 @@ import { CalendarIcon } from "@/shared/icons";
 import { user } from "@/assets";
 
 export const TaskDetailsMeta = () => (
-  <div className="grid grid-cols-[150px_1fr] gap-x-4 gap-y-6 py-5">
+  <div className="grid grid-cols-[100px_1fr] gap-x-4 gap-y-6 py-5">
     <TaskDetailsMetaItem title="Исполнитель">
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-3 items-center pl-3">
         <img src={user} className="w-7" />
         <span className="text-sm">Никита Хаецкий</span>
       </div>
     </TaskDetailsMetaItem>
 
     <TaskDetailsMetaItem title="Даты">
-      <div className="text-metaGray flex gap-3 items-center">
+      <div className="text-metaGray flex gap-3 items-center pl-3">
         <div className="border border-dashed border-metaGray w-fit rounded-full p-1.75">
           <CalendarIcon className="h-3" />
         </div>
@@ -27,7 +27,7 @@ export const TaskDetailsMeta = () => (
     <TaskDetailsMetaItem title="Проект">
       <button
         type="button"
-        className="text-xs font-semibold cursor-pointer text-metaGray"
+        className="text-xs font-semibold cursor-pointer text-metaGray pl-3"
       >
         Добавить проект
       </button>
@@ -35,7 +35,7 @@ export const TaskDetailsMeta = () => (
 
     <TaskDetailsMetaItem title="Описание" align="start">
       <textarea
-        className="rounded-[10px] border border-bgPrimary w-full px-3 py-3 resize-none"
+        className="rounded-[10px] border border-bgPrimary w-full px-3 py-3 resize-none focus:outline-none text-xs font-semibold placeholder-metaGray"
         rows={3}
         cols={5}
         placeholder="Добавьте описание к этой задаче..."

@@ -72,7 +72,7 @@ export const TaskDetailsHeader = ({
             icon={<CheckIcon className="h-[7.5px]" />}
             title="Задача завершена"
             onClick={handleTaskComplete}
-            className="bg-bgMain"
+            className="bg-bgPrimary"
           />
         ) : (
           <ButtonWithIcon

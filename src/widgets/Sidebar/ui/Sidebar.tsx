@@ -5,6 +5,8 @@ import {
 import { NavLink, type NavLinkProps } from "@/widgets/Sidebar/ui/NavLink";
 import { TeamItem, type TeamItemProps } from "@/widgets/Sidebar/ui/TeamItem";
 
+import { useBoardsList, useBoardStore } from "@/entities/board";
+
 import {
   ArrowDownIcon,
   BurgerIcon,
@@ -15,77 +17,69 @@ import {
 
 import { logo } from "@/assets";
 
-export const Sidebar = () => (
-  <aside className="w-72">
-    <div className="flex justify-between items-center">
-      <img src={logo} className="h-9 w-24" alt="logo" />
+export const Sidebar = () => {
+  const kanbanBoards = useBoardsList();
+  const activeBoardId = useBoardStore((state) => state.activeBoardId);
 
-      <button type="button" className="cursor-pointer">
-        <BurgerIcon className="h-3.5 text-lightGray" />
-      </button>
-    </div>
+  const boardsList = kanbanBoards.map(({ id, name }) => ({
+    boardId: id,
+    title: name,
+    color: id === activeBoardId ? "green" : "blue",
+  })) satisfies FavoriteItemProps[];
 
-    <nav className="mt-7">
-      <ul className="text-sm font-medium flex flex-col gap-6">
-        {navLinks.map((props, i) => (
-          <li key={i}>
-            <NavLink {...props} />
-          </li>
-        ))}
-      </ul>
-    </nav>
+  return (
+    <aside className="w-72">
+      <div className="flex justify-between items-center">
+        <img src={logo} className="h-9 w-24" alt="logo" />
 
-    <div className="mt-7">
-      <span className="text-xs font-bold text-lightGray">Избранное</span>
+        <button type="button" className="cursor-pointer">
+          <BurgerIcon className="h-3.5 text-lightGray" />
+        </button>
+      </div>
 
-      <ul className="flex flex-col gap-4 mt-2">
-        {favorites.map((props, i) => (
-          <li key={i}>
-            <FavoriteItem {...props} />
-          </li>
-        ))}
-      </ul>
+      <nav className="mt-7">
+        <ul className="text-sm font-medium flex flex-col gap-6">
+          {navLinks.map((props, i) => (
+            <li key={i}>
+              <NavLink {...props} />
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-      <button className="text-lightGray flex items-center gap-2 cursor-pointer mt-3">
-        <span className="text-xs leading-none">Раскрыть весь список</span>
-        <ArrowDownIcon className="h-1" />
-      </button>
-    </div>
+      <div className="mt-7">
+        <span className="text-xs font-bold text-lightGray">Избранное</span>
 
-    <div className="mt-5">
-      <span className="text-xs font-bold text-lightGray">Команды</span>
+        <ul className="flex flex-col gap-4 mt-2">
+          {boardsList.map((props, i) => (
+            <li key={i}>
+              <FavoriteItem {...props} />
+            </li>
+          ))}
+        </ul>
 
-      <ul className="flex flex-col gap-4 font-semibold mt-2">
-        {teams.map((props, i) => (
-          <li key={i}>
-            <TeamItem {...props} />
-          </li>
-        ))}
-      </ul>
-    </div>
-  </aside>
-);
+        <button className="text-lightGray flex items-center gap-2 cursor-pointer mt-3">
+          <span className="text-xs leading-none">Раскрыть весь список</span>
+          <ArrowDownIcon className="h-1" />
+        </button>
+      </div>
+
+      <div className="mt-5">
+        <span className="text-xs font-bold text-lightGray">Команды</span>
+
+        <ul className="flex flex-col gap-4 font-semibold mt-2">
+          {teams.map((props, i) => (
+            <li key={i}>
+              <TeamItem {...props} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  );
+};
 
 // ----------------- Mock data -----------------
-
-const favorites = [
-  {
-    title: "Электротовары",
-    color: "green",
-  },
-  {
-    title: "Лесхозснаб",
-    color: "green",
-  },
-  {
-    title: "Посуда-Сити",
-    color: "green",
-  },
-  {
-    title: "Автошкола “Автолицей”",
-    color: "blue",
-  },
-] satisfies FavoriteItemProps[];
 
 const navLinks = [
   {

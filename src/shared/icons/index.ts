@@ -18,3 +18,4 @@ export { CheckIcon } from "./CheckIcon";
 export { PaperClipIcon } from "./PaperClip";
 export { ArrowRightIcon } from "./ArrowRightIcon";
 export { CalendarIcon } from "./CalendarIcon";
+export { SendIcon } from "./SendIcon";

@@ -27,7 +27,7 @@ export const TaskDetails = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <TaskDetailsHeader
         task={task}
         columnId={columnId}
@@ -35,20 +35,23 @@ export const TaskDetails = ({
         onToggleTimer={handleToggleTimer}
         onClose={onClose}
       />
-      <div className="flex flex-col">
-        <h4 className="text-2xl text-textMain font-semibold">{task.name}</h4>
 
-        <TaskDetailsMeta />
+      <div className="flex flex-col justify-between px-6 h-full overflow-y-auto">
+        <div className="flex flex-col">
+          <h4 className="text-2xl text-textMain font-semibold">{task.name}</h4>
 
-        <h5 className="text-gray text-sm">Подзадачи</h5>
+          <TaskDetailsMeta />
 
-        <TaskDetailsSubtasks
-          task={task}
-          columnId={columnId}
-          onSubtaskComplete={taskActions.toggleSubtaskCompletion}
-        />
+          <h5 className="text-gray text-sm">Подзадачи</h5>
 
-        <TaskDetailsComments />
+          <TaskDetailsSubtasks
+            task={task}
+            columnId={columnId}
+            onSubtaskComplete={taskActions.toggleSubtaskCompletion}
+          />
+        </div>
+
+        <TaskDetailsComments comments={task.comments} />
       </div>
     </div>
   );
